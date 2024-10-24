@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { encryptApiKey, encryptDefault } from '../lib/helpers'
 import { getData } from '../lib/repository'
 import PaginationCustom from './Pagination/PaginationCustom'
+import Link from 'next/link'
 
 const PokemonList = () => {
   const totalList = 28
@@ -13,8 +14,8 @@ const PokemonList = () => {
   const [textSearch, setTextSearch] = useState('')
   const [activePagination, setActivePagination] = useState(1)
 
-  const apiGetPokemon = async () => {
-    const url = encryptDefault(`api/v2/pokemon?limit=1000&offset=0`)
+  const apiGetPokemon = async (param) => {
+    const url = encryptDefault(`api/v2/${param}?limit=1000&offset=0`)
     const hitApi = await getData(url, {
       guid: "",
       data: {
@@ -28,26 +29,25 @@ const PokemonList = () => {
       setAlertMsg(hitApi?.info)
     }
     setIsLoading(false)
-    console.log('hitApi', hitApi)
   }
 
   const handleFilter = (el) => {
     if (textSearch?.length > 0) {
       return el?.name?.toLowerCase().includes(textSearch?.toLowerCase())
     }
-
     return el
   }
 
   useEffect(() => {
-    apiGetPokemon()
+    apiGetPokemon('pokemon')
   }, [])
 
   return (
     <section className='beranda pt-4 pb-5'>
-      <h2 className='text-center my-5 font-bold text-[24px] md:text-[40px]'>POKEDEX APP</h2>
-      <div className='mt-10 mb-4 flex justify-center'>
-        <input type='text' className='border-2 w-full md:w-1/3 border-[#0075BE] text-[#0075BE] rounded-md p-2 focus:outline-none' onChange={(e) => setTextSearch(e.target.value)} name='namePokemon' autoComplete='off' placeholder='Search pokemon name' />
+      <Link href="/" className='my-5 font-black text-[24px] md:text-[40px]'>POKEDEX APP</Link>
+      <div className='mt-10 mb-2 flex max-sm:flex-col md:items-center justify-between gap-[15px]'>
+        <h3 className='font-semibold text-2xl'>List Pokemon</h3>
+        <input type='text' className='border-2 w-full md:w-1/3 border-[#FFCC00] rounded-md p-2 shadow-md focus:outline-none' value={textSearch} onChange={(e) => { setTextSearch(e.target.value); setActivePagination(1) }} name='namePokemon' autoComplete='off' placeholder={`Search pokemon name`} />
       </div>
       <div className='mb-5'>
         <div className='grid grid-cols-2 md:grid-cols-4 gap-3 mt-5'>
@@ -60,9 +60,9 @@ const PokemonList = () => {
               </div>
             )) : dataListPokemon?.results?.filter(fil => handleFilter(fil))?.slice(activePagination * totalList - totalList, activePagination * totalList)?.length > 0 &&
             dataListPokemon?.results?.filter(fil => handleFilter(fil))?.slice(activePagination * totalList - totalList, activePagination * totalList)?.map((item, idx) => (
-              <div key={idx} className="uppercase border-2 border-[#0075BE] bg-[#FFCC00] text-[#0075BE] font-bold text-center shadow rounded-md px-4 py-5 w-full cursor-pointer hover:border-[#FFCC00] hover:bg-[#0075BE] hover:text-[#FFCC00]">
+              <Link href={`/${item?.name}`} key={idx} className="uppercase border-2 border-[#0075BE] bg-[#FFCC00] text-[#0075BE] font-bold text-center shadow rounded-md px-4 py-5 w-full cursor-pointer hover:border-[#FFCC00] hover:bg-[#0075BE] hover:text-[#FFCC00]">
                 {item?.name}
-              </div>
+              </Link>
             ))
           }
         </div>

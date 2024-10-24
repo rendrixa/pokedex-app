@@ -19,6 +19,14 @@ module.exports = (phase) => {
 
   return {
     env,
+    images: {
+      remotePatterns: [
+        {
+          protocol: "https",
+          hostname: "raw.githubusercontent.com"
+        }
+      ]
+    },
     async headers() {
       return [
         {

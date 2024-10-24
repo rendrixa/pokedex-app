@@ -1,0 +1,20 @@
+.custom-tab-select {
+  background: #F8F9FC;
+  border-radius: 8px;
+  overflow: auto;
+
+  .item {
+    font-size: 16px;
+    color: #0075BE;
+    font-weight: bold;
+    border-radius: 8px;
+    text-align: center;
+    border: 2px solid #0075BE;
+
+    &.active {
+      color: #FFF;
+      background-color: #0075BE;
+      border: 2px solid #0075BE;
+    }
+  }
+}

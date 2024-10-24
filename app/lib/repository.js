@@ -25,6 +25,11 @@ export async function getData(url, params) {
       }))
 
     const data = await response
+
+    if (data?.code) {
+      return data
+    }
+
     return {
       code: '0',
       info: 'Success Get Data',
